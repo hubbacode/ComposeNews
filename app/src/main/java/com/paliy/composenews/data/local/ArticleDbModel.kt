@@ -3,6 +3,7 @@ package com.paliy.composenews.data.local
 import androidx.room3.Entity
 import androidx.room3.ForeignKey
 import androidx.room3.ForeignKey.Companion.CASCADE
+import androidx.room3.Index
 
 @Entity(
     tableName = "articles",
@@ -14,7 +15,8 @@ import androidx.room3.ForeignKey.Companion.CASCADE
             childColumns = ["topic"],
             onDelete = CASCADE
         )
-    ]
+    ],
+    indices = [Index("topic")]
 )
 data class ArticleDbModel(
     val title: String,
