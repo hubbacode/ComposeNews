@@ -5,7 +5,7 @@ import androidx.room3.RoomDatabase
 
 @Database(
     entities = [SubscriptionDbModel::class, ArticleDbModel::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class NewsDatabase: RoomDatabase() {
