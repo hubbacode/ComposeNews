@@ -4,11 +4,18 @@ import android.content.Context
 import androidx.room3.Room
 import com.paliy.composenews.data.local.NewsDao
 import com.paliy.composenews.data.local.NewsDatabase
+import com.paliy.composenews.data.remote.NewsApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.serialization.json.Json
+import okhttp3.MediaType.Companion.toMediaType
+import retrofit2.Converter
+import retrofit2.Retrofit
+import retrofit2.converter.kotlinx.serialization.asConverterFactory
+import retrofit2.create
 import javax.inject.Singleton
 
 @Module
@@ -17,6 +24,54 @@ interface DataModule {
 
 
     companion object{
+
+        @Singleton
+        @Provides
+        fun provideJson(): Json{
+            return Json{
+                ignoreUnknownKeys = true
+                coerceInputValues = true
+            }
+        }
+
+        @Singleton
+        @Provides
+        fun provideConverterFactory(
+            json: Json
+        ): Converter.Factory {
+            return json.asConverterFactory(
+                "application/json".toMediaType())
+        }
+
+        @Singleton
+        @Provides
+        fun provideRetrofit(
+            converterFactory: Converter.Factory
+        ): Retrofit {
+            return Retrofit.Builder()
+                .baseUrl("https://newsapi.org/")
+                .addConverterFactory(converterFactory)
+                .build()
+        }
+
+        @Singleton
+        @Provides
+        fun provideApiService(
+            retrofit: Retrofit
+        ):  NewsApiService{
+            /*val baseUrl = "https://newsapi.org/"
+            val converter = Json{
+                ignoreUnknownKeys = true
+                coerceInputValues = true
+            }.asConverterFactory(
+                "application/json".toMediaType()
+            )
+            val retrofit = Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(converter)
+                .build()*/
+            return retrofit.create()
+        }
 
         @Singleton
         @Provides
