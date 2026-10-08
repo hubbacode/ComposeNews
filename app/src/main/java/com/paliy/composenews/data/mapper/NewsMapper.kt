@@ -1,12 +1,12 @@
 package com.paliy.composenews.data.mapper
 
 import com.paliy.composenews.data.local.ArticleDbModel
-import com.paliy.composenews.data.remote.NewsResponceDto
+import com.paliy.composenews.data.remote.NewsResponseDto
 import com.paliy.composenews.domain.entity.Article
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-fun NewsResponceDto.toDbModels(topic: String): List<ArticleDbModel>{
+fun NewsResponseDto.toDbModels(topic: String): List<ArticleDbModel>{
     return articles.map {
         ArticleDbModel(
             title = it.title,
