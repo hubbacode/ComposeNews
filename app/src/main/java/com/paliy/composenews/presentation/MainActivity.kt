@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.lifecycleScope
 import com.paliy.composenews.data.remote.NewsApiService
+import com.paliy.composenews.presentation.screens.subscriptions.SubscriptionScreen
 import com.paliy.composenews.presentation.ui.theme.ComposeNewsTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -26,7 +27,9 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ComposeNewsTheme {
-
+                SubscriptionScreen(
+                    onNavigateToSettings = {}
+                )
             }
         }
     }
