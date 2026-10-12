@@ -1,7 +1,9 @@
 package com.paliy.composenews.di
 
 import android.content.Context
+import androidx.hilt.work.HiltWorker
 import androidx.room3.Room
+import androidx.work.WorkManager
 import com.paliy.composenews.data.local.NewsDao
 import com.paliy.composenews.data.local.NewsDatabase
 import com.paliy.composenews.data.remote.NewsApiService
@@ -32,6 +34,12 @@ interface DataModule {
     ): NewsRepository
 
     companion object{
+
+        @Provides
+        @Singleton
+        fun provideWorkManager(
+            @ApplicationContext context: Context
+        ): WorkManager = WorkManager.getInstance(context)
 
         @Singleton
         @Provides
