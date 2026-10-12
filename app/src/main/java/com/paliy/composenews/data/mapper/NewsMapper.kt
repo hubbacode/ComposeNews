@@ -3,6 +3,7 @@ package com.paliy.composenews.data.mapper
 import com.paliy.composenews.data.local.ArticleDbModel
 import com.paliy.composenews.data.remote.NewsResponseDto
 import com.paliy.composenews.domain.entity.Article
+import com.paliy.composenews.domain.entity.Interval
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -18,6 +19,10 @@ fun NewsResponseDto.toDbModels(topic: String): List<ArticleDbModel>{
             topic = topic
         )
     }
+}
+
+fun Int.toInterval(): Interval {
+    return Interval.entries.first{ it.minutes == this}
 }
 
 fun List<ArticleDbModel>.toEntities(): List<Article>{

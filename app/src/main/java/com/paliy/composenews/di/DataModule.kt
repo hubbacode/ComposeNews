@@ -8,7 +8,9 @@ import com.paliy.composenews.data.local.NewsDao
 import com.paliy.composenews.data.local.NewsDatabase
 import com.paliy.composenews.data.remote.NewsApiService
 import com.paliy.composenews.data.repository.NewsRepositoryImpl
+import com.paliy.composenews.data.repository.SettingsRepositoryImpl
 import com.paliy.composenews.domain.repository.NewsRepository
+import com.paliy.composenews.domain.repository.SettingsRepository
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -26,6 +28,12 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 interface DataModule {
+
+    @Binds
+    @Singleton
+    fun bindSettingsRepository(
+        impl: SettingsRepositoryImpl
+    ): SettingsRepository
 
     @Binds
     @Singleton
