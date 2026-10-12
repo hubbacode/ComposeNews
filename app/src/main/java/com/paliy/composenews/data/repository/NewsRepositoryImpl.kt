@@ -1,7 +1,9 @@
 package com.paliy.composenews.data.repository
 
 import android.util.Log
+import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.paliy.composenews.data.background.RefreshDataWorker
@@ -12,6 +14,7 @@ import com.paliy.composenews.data.mapper.toDbModels
 import com.paliy.composenews.data.mapper.toEntities
 import com.paliy.composenews.data.remote.NewsApiService
 import com.paliy.composenews.domain.entity.Article
+import com.paliy.composenews.domain.entity.RefreshConfig
 import com.paliy.composenews.domain.repository.NewsRepository
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.coroutineScope
@@ -75,10 +78,22 @@ class NewsRepositoryImpl @Inject constructor(
         }
     }
 
-    private fun startBackgroundRefresh(){
+    private fun startBackgroundRefresh(refreshConfig: RefreshConfig){
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(
+                if (refreshConfig.wifiOnly){
+                    NetworkType.UNMETERED
+                }else{
+                    NetworkType.CONNECTED
+                }
+            )
+            .setRequiresBatteryNotLow(true)
+            .build()
+
         val request = PeriodicWorkRequestBuilder<RefreshDataWorker>(
-            15L, TimeUnit.MINUTES
-        ).build()
+            refreshConfig.interval.minutes.toLong(), TimeUnit.MINUTES
+        ).setConstraints(constraints).build()
+
         workManager.enqueueUniquePeriodicWork(
             uniqueWorkName = "Refresh data",
             existingPeriodicWorkPolicy = ExistingPeriodicWorkPolicy.CANCEL_AND_REENQUEUE,
